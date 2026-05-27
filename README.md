@@ -16,13 +16,13 @@
 
 仓库内提供：
 
-- `appsettings.Development.json`：本机联调参考
-- `appsettings.Production.json.example`：生产环境示例（请复制后改名）
+- `appsettings.Development.json.example`：开发环境示例（无真实 IP/Token）
+- `appsettings.Production.json.example`：生产环境示例（无真实 IP/Token）
 
 在实际运行目录中准备 `appsettings.json`（建议做法）：
 
-- 开发：复制 `appsettings.Development.json` 为 `appsettings.json`
-- 生产：复制 `appsettings.Production.json.example` 为 `appsettings.json`，并填入真实公网 IP/域名、内网地址、Token
+- 开发：复制 `appsettings.Development.json.example` 为 `appsettings.Development.local.json`（仅本地）或直接复制为 `appsettings.json`
+- 生产：复制 `appsettings.Production.json.example` 为 `appsettings.Production.local.json`（仅本地）或直接复制为 `appsettings.json`，并填入真实公网 IP/域名、内网地址、Token
 
 > 本仓库已在 `.gitignore` 中忽略 `appsettings.json`，避免误提交 Token/内网 IP 等敏感信息。
 
@@ -84,7 +84,7 @@ NATConsole client --config /path/to/appsettings.json
 - `Token`：可用测试 token
 - `Server.PublicHost`：可填 `127.0.0.1`
 - `Client.ServerHost`：可填 `127.0.0.1`（同机跑 server+client 时）
-- `Client.Tunnels[].ForwardHost`：按内网环境填写
+- `Client.Tunnels[].ForwardHost`：按内网环境填写（这属于隐私信息，建议只放在 `appsettings.Development.local.json`）
 
 ### 生产（Production）
 

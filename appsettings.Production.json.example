@@ -14,7 +14,7 @@
         "Id": "api",
         "LocalHost": "127.0.0.1",
         "LocalPort": 9001,
-        "ForwardHost": "192.168.1.14:9001",
+        "ForwardHost": "your-intranet-ip:9001",
         "RewriteResponsePaths": true,
         "DedicatedHttpPort": 0
       },
@@ -22,7 +22,7 @@
         "Id": "timer",
         "LocalHost": "127.0.0.1",
         "LocalPort": 5001,
-        "ForwardHost": "192.168.1.14:5001",
+        "ForwardHost": "your-intranet-ip:5001",
         "RewriteResponsePaths": true,
         "DedicatedHttpPort": 0
       },
@@ -30,7 +30,7 @@
         "Id": "admin",
         "LocalHost": "127.0.0.1",
         "LocalPort": 80,
-        "ForwardHost": "192.168.1.14",
+        "ForwardHost": "your-intranet-ip",
         "RewriteResponsePaths": false,
         "DedicatedHttpPort": 8081
       }
