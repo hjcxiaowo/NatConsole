@@ -6,13 +6,27 @@ public static class AppConfigLoader
 {
     public static AppSettings Load(string[] args, out string? configPath)
     {
-        ParseConfigArgs(args, out configPath, out var envName);
+        ParseConfigArgs(args, out var explicitConfigPath, out var envName);
 
         var builder = new ConfigurationBuilder();
 
-        if (!string.IsNullOrEmpty(configPath))
+        // 没有显式指定配置文件时，允许交互式选择 dev/prod：
+        // - 直接回车：使用 appsettings.json
+        // - 输入 dev：使用 appsettings.Development.json
+        // - 输入 prod：使用 appsettings.Production.json
+        if (string.IsNullOrEmpty(explicitConfigPath) && string.IsNullOrEmpty(envName))
+            envName = MaybePromptEnv();
+
+        var resolvedFileName = !string.IsNullOrEmpty(explicitConfigPath)
+            ? null
+            : ResolveConfigFileForEnv(envName);
+
+        // configPath 用于输出提示信息，所以这里把“最终选择的文件”也返回出去。
+        configPath = !string.IsNullOrEmpty(explicitConfigPath) ? explicitConfigPath : resolvedFileName;
+
+        if (!string.IsNullOrEmpty(explicitConfigPath))
         {
-            var full = Path.GetFullPath(configPath);
+            var full = Path.GetFullPath(explicitConfigPath);
             var dir = Path.GetDirectoryName(full) ?? AppContext.BaseDirectory;
             builder.SetBasePath(dir)
                 .AddJsonFile(Path.GetFileName(full)!, optional: false, reloadOnChange: false);
@@ -20,9 +34,7 @@ public static class AppConfigLoader
         else
         {
             builder.SetBasePath(AppContext.BaseDirectory);
-
-            var file = ResolveConfigFileForEnv(envName);
-            builder.AddJsonFile(file, optional: false, reloadOnChange: false);
+            builder.AddJsonFile(resolvedFileName!, optional: false, reloadOnChange: false);
         }
 
         builder.AddEnvironmentVariables("NATCONSOLE_");
@@ -60,6 +72,28 @@ public static class AppConfigLoader
             list.Add(args[i]);
         }
         return list.ToArray();
+    }
+
+    private static string? MaybePromptEnv()
+    {
+        // 非交互环境（例如 docker -d 无 tty）不要阻塞等待输入
+        if (Console.IsInputRedirected || !Environment.UserInteractive)
+            return null;
+
+        Console.Write("配置后缀(dev/prod，回车=appsettings.json)：");
+        var input = Console.ReadLine();
+
+        if (string.IsNullOrWhiteSpace(input))
+            return null;
+
+        var s = input.Trim().ToLowerInvariant();
+        if (s is "dev" or "d")
+            return "Development";
+        if (s is "prod" or "p")
+            return "Production";
+
+        Console.WriteLine($"未知输入: {input}（仅支持 dev/prod，回车=appsettings.json），将回退到 appsettings.json");
+        return null;
     }
 
     private static string ResolveConfigFileForEnv(string? envName)
