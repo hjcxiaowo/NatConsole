@@ -51,6 +51,20 @@ NATConsole server --config /path/to/appsettings.json
 NATConsole client --config /path/to/appsettings.json
 ```
 
+也支持用环境参数快捷切换（推荐配合 `*.local.json`）：
+
+```bash
+NATConsole server --env prod
+NATConsole client --env dev
+```
+
+程序会按优先级自动查找并加载（从程序目录下查找）：
+
+- `appsettings.{Env}.local.json`
+- `appsettings.{Env}.json`
+- `appsettings.{Env}.json.example`
+- `appsettings.json`
+
 ### 配置结构
 
 #### `Token`

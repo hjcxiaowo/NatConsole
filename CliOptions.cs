@@ -42,12 +42,18 @@ public static class CliOptions
         Console.WriteLine("""
             NATConsole - 自托管 HTTP 内网穿透
 
-            配置：编辑程序目录 appsettings.json（唯一配置文件）
+            配置：
+              - 默认读取程序目录 appsettings.json
+              - 可用 --config 指定任意配置文件路径
+              - 可用 --env 选择环境（Development/Production），会按优先级查找：
+                appsettings.{Env}.local.json -> appsettings.{Env}.json -> appsettings.{Env}.json.example -> appsettings.json
 
             用法:
               NATConsole server
               NATConsole client
               NATConsole client --config D:\my\appsettings.json
+              NATConsole server --env prod
+              NATConsole client --env dev
 
             客户端 Client.Tunnels 列表可配置多条隧道，一次启动全部连接。
 
