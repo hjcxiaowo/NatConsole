@@ -1,0 +1,39 @@
+{
+  "Token": "请替换为正式环境 Token",
+  "Server": {
+    "BindHost": "0.0.0.0",
+    "ControlPort": 7000,
+    "HttpPort": 8080,
+    "PublicHost": "your-public-ip-or-domain"
+  },
+  "Client": {
+    "ServerHost": "your-public-ip-or-domain",
+    "ServerPort": 7000,
+    "Tunnels": [
+      {
+        "Id": "api",
+        "LocalHost": "127.0.0.1",
+        "LocalPort": 9001,
+        "ForwardHost": "192.168.1.14:9001",
+        "RewriteResponsePaths": true,
+        "DedicatedHttpPort": 0
+      },
+      {
+        "Id": "timer",
+        "LocalHost": "127.0.0.1",
+        "LocalPort": 5001,
+        "ForwardHost": "192.168.1.14:5001",
+        "RewriteResponsePaths": true,
+        "DedicatedHttpPort": 0
+      },
+      {
+        "Id": "admin",
+        "LocalHost": "127.0.0.1",
+        "LocalPort": 80,
+        "ForwardHost": "192.168.1.14",
+        "RewriteResponsePaths": false,
+        "DedicatedHttpPort": 8081
+      }
+    ]
+  }
+}

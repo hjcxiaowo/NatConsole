@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "NATConsole": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
